@@ -20,9 +20,33 @@ class Disloques extends CI_Controller {
 	 */
 	public function __construct(){
 		parent::__construct();
+
+		$this->load->helper(array('form', 'url'));
       $this->load->library('session');
       $this->load->model('model_disloques');
 	}
+
+
+
+	###########################################################
+	public function guardar_disloque()
+	{
+		if(isset($_REQUEST['guardar_disloque'])){
+			$cantidad_recaudadores_asignados = $_REQUEST['cantidad_recaudadores_asignados'];
+			for($i=0;$i<$cantidad_recaudadores_asignados;$i++){
+				echo "<br> ".$i." ASIGNACION=".$_REQUEST['reten_id_'.$i]." RECAUDADOR_ID=".$_REQUEST['recaudador_id_'.$i];
+			}
+
+		}
+
+
+		$view_data["lista_retenes"] = $this->model_disloques->get_lista_retenes();
+		$view_data["lista_recaudadores"] = $this->model_disloques->get_lista_recaudadores();
+		$view_data["maximo_disloque_numero"] = $this->model_disloques->get_maximo_disloque_numero();		
+
+		$this->load->view('guardar_disloque', $view_data);
+	}
+
 	public function index()
 	{		
 		$view_data["lista_retenes"] = $this->model_disloques->get_lista_retenes();

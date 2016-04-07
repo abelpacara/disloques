@@ -53,7 +53,11 @@ while($disloques_counter<$disloques_limit){
 						for(;$index_recaudadores<count($lista_recaudadores); $index_recaudadores++){
 						?>
 							<tr>
-								<td><?php echo $index_recaudadores." ".$lista_recaudadores[$index_recaudadores]["recaudador_nombres"]." ".$lista_recaudadores[$index_recaudadores]["recaudador_apellidos"]?></td>
+								<td>
+									<?php echo $index_recaudadores." ".$lista_recaudadores[$index_recaudadores]["recaudador_nombres"]." ".$lista_recaudadores[$index_recaudadores]["recaudador_apellidos"]?>
+									<input type="hidden" name="reten_id_<?php echo $index_recaudadores?>" value="<?php echo $lista_retenes[$i]['id_reten']?>"/>
+									<input type="hidden" name="recaudador_id_<?php echo $index_recaudadores?>" value="<?php echo $lista_recaudadores[$index_recaudadores]['id_recaudador']?>"/>
+								</td>
 							</tr>
 							<?php
 							$k++;
@@ -73,7 +77,15 @@ while($disloques_counter<$disloques_limit){
 	</table>
 	<br/>
 <?php
-}?>
+}
+
+echo "<br>INDEX_RECAUDADOR=".$index_recaudadores;
+
+?>
+
+<input type="hidden" name="cantidad_recaudadores_asignados" value="<?php echo $index_recaudadores?>"/>
+
+<input name="guardar_disloque" type="submit" value="Guardar Disloque"/>
 
 <?php
 echo form_close();
