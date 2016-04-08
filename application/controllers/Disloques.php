@@ -35,14 +35,20 @@ class Disloques extends CI_Controller {
 			$cantidad_recaudadores_asignados = $_REQUEST['cantidad_recaudadores_asignados'];
 			for($i=0;$i<$cantidad_recaudadores_asignados;$i++){
 				echo "<br> ".$i." ASIGNACION=".$_REQUEST['reten_id_'.$i]." RECAUDADOR_ID=".$_REQUEST['recaudador_id_'.$i];
+
+
+				$data['reten_id'] = $_REQUEST['reten_id_'.$i];
+				$data['recaudador_id'] =$_REQUEST['reten_id_'.$i];
+
+				$this->model_disloques->add_dislocate($data);
 			}
 
 		}
 
 
 		$view_data["lista_retenes"] = $this->model_disloques->get_lista_retenes();
-		$view_data["lista_recaudadores"] = $this->model_disloques->get_lista_recaudadores();
-		$view_data["maximo_disloque_numero"] = $this->model_disloques->get_maximo_disloque_numero();		
+		$view_data["maximo_disloque_numero"] = $maximo_disloque_numero = $this->model_disloques->get_maximo_disloque_numero();
+		$view_data["lista_recaudadores"] = $this->model_disloques->get_lista_recaudadores($maximo_disloque_numero + 1);
 
 		$this->load->view('guardar_disloque', $view_data);
 	}
