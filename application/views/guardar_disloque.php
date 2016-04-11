@@ -27,7 +27,7 @@ echo "<br>RECAUDADORES ASIGNADOS = ".count($lista_recaudadores_asignados);
 
 <table border="1">
 		<tr>
-			<th colspan="5"><h1>Disloque programado</h1></th>
+			<th colspan="5"><h2>Disloque programado</h2></th>
 		</tr>
 		<tr>
 			<th colspan="5"><?php echo $maximo_disloque_numero; ?></th>
@@ -100,7 +100,7 @@ $disloques_counter = 0;
 	?>
 	<table border="1">
 		<tr>
-			<th colspan="5"><h1>Disloque a programar</h1></th>
+			<th colspan="5"><h2>Disloque a programar</h2></th>
 		</tr>
 		<tr>
 			<th colspan="5"><?php echo $maximo_disloque_numero+1; ?>
@@ -181,7 +181,7 @@ echo form_close();
 
 	<table border="1">
 		<tr>
-			<th colspan="5"><h1>Recaudadores en descanso</h1></th>
+			<th colspan="5"><h2>Recaudadores en descanso</h2></th>
 		</tr>
 		<tr>
 			<th>#</th>
@@ -189,12 +189,14 @@ echo form_close();
 			<th>Estado</th>
 		</tr>
 		<?php
-		for($i=0;$i<count($lista_recaudadores_no_asignados);$i++){
+		$i=0;
+		for(;$index_recaudadores<count($lista_recaudadores_no_asignados);$index_recaudadores++){
+			$i++;
 		?>
 			<tr>
 				<td><?php echo $i?></td>
-				<td><?php echo $lista_recaudadores_no_asignados[$i]['recaudador_nombres']." ".$lista_recaudadores_no_asignados[$i]['recaudador_apellidos']?></td>
-				<td><?php echo $lista_recaudadores_no_asignados[$i]['recaudador_ultimo_disloque_numero']?></td>
+				<td><?php echo $lista_recaudadores_no_asignados[$index_recaudadores]['recaudador_nombres']." ".$lista_recaudadores_no_asignados[$i]['recaudador_apellidos']?></td>
+				<td><?php echo $lista_recaudadores_no_asignados[$index_recaudadores]['recaudador_ultimo_disloque_numero']?></td>
 			</tr>
 			<?php
 		}
