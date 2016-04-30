@@ -1,0 +1,65 @@
+<style>
+.dislocate_table{
+	border-style: outset;
+	border-width: 1px;
+}
+.table_container{
+	float: left;
+}
+
+</style>
+<head>
+	<title>Rotaciones Vias Bolivia Cbba</title>
+</head>
+
+<div class="table_container">
+<?php
+echo form_open_multipart("rotaciones/guardar_disloque");
+?>
+<!-- <h1>rotaciones</h1>
+<h1>Asignacion de Recaudadores a Retenes Vias Bolivia Cbba</h1> -->
+<?php
+$index_recaudadores=0;
+$rotaciones_counter = 0;
+
+	?>
+	<table border="1">
+		<tr>
+			<th colspan="5"><h1>Gestion Rotaciones</h1></th>
+		</tr>
+		<tr>
+			<th colspan="5">
+				<label>Fecha Del</label>
+				<input type="text" name="disloque_fecha_del"/>
+				<label>Fecha Al</label>
+				<input type="text" name="disloque_fecha_al"/>
+			</th>
+		</tr>
+		<tr>
+			<th>#</th>
+			<?php
+			for($i=0; $i<count($lista_retenes); $i++){
+				?>
+					<th>
+					<?php
+					echo $lista_retenes[$i]["reten_nombre"];
+					?>
+					</th>
+				<?php
+			}
+			?>
+		</tr>		
+		<?php
+		for($i=0; $i<count($lista_rotaciones_recaudadores); $i++){
+		?>
+			<th><?php echo ?></th>
+		<?php
+		}?>
+		
+
+	</table>
+</table>
+
+
+<br/>
+</div>
