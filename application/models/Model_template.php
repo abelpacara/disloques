@@ -6,6 +6,15 @@ class Model_Template extends CI_Model
        parent::__construct();       
        $this->db->query("SET SESSION time_zone='-4:00'");
    }
+    #############################################################################
+   function get_list_table_enum_column_values($table, $column)
+   {
+      $query = $this->db->query("show columns from ".$table." LIKE '".$column."';");
+      $row = $query->row_array();
+      $array_values= explode(",", str_replace("'", "", substr($row['Type'], 5, (strlen($row['Type'])-6))));      
+      
+      return $array_values;
+   }
    #############################################################################
    function add_time_default_to_user($user_id)
    {

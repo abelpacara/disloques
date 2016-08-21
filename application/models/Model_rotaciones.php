@@ -7,21 +7,99 @@ class Model_rotaciones extends Model_Template
        $this->db->query("SET SESSION time_zone='-4:00'");
    }
    #####################################################
-   function get_lista_rotaciones($fecha_del, $fecha_al){
-      $query = $this->db->query("SELECT * FROM rotaciones WHERE 
-                                                        (rotacion_fecha_del BETWEEN '".$fecha_del."' AND '".$fecha_al."')
-                                                         OR
-                                                        (rotacion_fecha_al BETWEEN '".$fecha_del."' AND '".$fecha_al."');");
+   function get_ultima_rotacion($id_rotacion=null){
+      $sql = "SELECT * FROM rotaciones ";
+      if(isset($id_rotacion)){
+        $sql .= " WHERE id_rotacion = ".$id_rotacion;  
+      }
+      else{
+        $sql .= " ORDER BY id_rotacion DESC LIMIT 1 ";   
+      }
+
+      $query = $this->db->query($sql);  
+      
+      return $query->row_array();
+   }
+   #####################################################
+   function guardar_rotacion($data){
+
+      $maximo_rotacion_numero = $this->get_maximo_rotacion_numero();
+
+      $data['rotacion_numero'] = $maximo_rotacion_numero + 1 ;
+
+      $this->db->trans_start();
+      $this->db->insert("rotaciones",$data);
+      $id_rotacion = $this->db->insert_id();
+      $this->db->trans_complete();
+
+      return $id_rotacion;
+   }
+
+   function guardar_rotacion_recaudador($data, $rotacion_numero=1){
+
+      $this->db->trans_start();
+      $this->db->insert("rotacion_recaudadores",$data);
+      $id_rotacion_recaudador = $this->db->insert_id();
+      $this->db->trans_complete();
+
+
+      $this->db->trans_start();
+      $this->db->set('recaudador_ultimo_rotacion_numero', $rotacion_numero);
+      $this->db->where('id_recaudador', $data['recaudador_id']);
+      $this->db->update('recaudadores'); 
+      $this->db->trans_complete();
+      
+
+      return $id_rotacion_recaudador;
+   }
+   #####################################################
+   function get_lista_rotaciones($fecha_del="", $fecha_al=""){
+
+      $sql ="SELECT * FROM rotaciones ";
+
+      if(strcasecmp($fecha_del,"")!=0 AND strcasecmp($fecha_del,"")!=0){
+        $sql .= " WHERE 
+                                                          (rotacion_fecha_del BETWEEN '".$fecha_del."' AND '".$fecha_al."')
+                                                           OR
+                
+                                                          (rotacion_fecha_al BETWEEN '".$fecha_del."' AND '".$fecha_al."')";
+        
+      }
+      $query = $this->db->query($sql." ORDER BY id_rotacion DESC;");      
+      return $query->result_array();
+   }
+  
+   #####################################################
+   function get_lista_recaudadores_designados($rotacion_id=0, $rotacion_numero, $reten_id=0, $plan=1){
+     
+      /*$sql="SELECT recaudadores.* 
+      FROM recaudadores 
+      JOIN rotacion_recaudadores ON id_recaudador =  recaudador_id
+      JOIN rotaciones ON rotacion_id = id_rotacion     
+      WHERE rotacion_numero = ".$rotacion_numero."  AND reten_id = '".$reten_id."' AND rotacion_recaudador_plan='".$plan."'";*/
+
+
+      $sql="SELECT recaudadores.* 
+      FROM recaudadores 
+      JOIN rotacion_recaudadores ON id_recaudador =  recaudador_id            
+
+      WHERE rotacion_numero = ".$rotacion_numero." AND  reten_id = '".$reten_id."' AND rotacion_recaudador_plan='".$plan."'";
+
+
+      echo "<br>".$sql;
+
+      $query = $this->db->query($sql.";");
+            
       return $query->result_array();
    }
    #####################################################
-   function get_lista_recaudadores($rotacion_id=0, $reten_id=0, $plan=1){
-      $sql="SELECT recaudadores.* 
-      FROM recaudadores 
-      JOIN rotacion_recaudadores ON id_recaudador =  recaudador_id
-      WHERE rotacion_id = '".$rotacion_id."' AND reten_id = '".$reten_id."' AND rotacion_recaudador_plan='".$plan."' ";
+   function get_lista_recaudadores_nuevos(){
+      $sql="SELECT recaudadores.*
+      FROM recaudadores
+      WHERE recaudadores.recaudador_ultimo_rotacion_numero=0; ";
 
-      $query = $this->db->query($sql.";");
+
+      $query = $this->db->query($sql);
             
       return $query->result_array();
    }
@@ -58,10 +136,5 @@ class Model_rotaciones extends Model_Template
       $this->db->insert("rotacion_recaudadores",$data);
       return $this->db->insert_id();
    }
-   #####################################################
-   function add_dislocate($data){
-      //$this->db->set("post_register_date","NOW()",FALSE);
-      $this->db->insert("rotaciones",$data);
-      return $this->db->insert_id();
-   }
+  
 }

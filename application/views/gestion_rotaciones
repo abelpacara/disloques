@@ -48,7 +48,7 @@ $rotaciones_counter = 0;
 				<?php
 			}
 			?>
-		</tr>		
+		</tr>
 		<?php
 		for($i=0; $i<count($lista_rotaciones_recaudadores); $i++){
 		?>
