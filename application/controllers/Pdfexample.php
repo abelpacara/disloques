@@ -38,6 +38,30 @@ class Pdfexample extends CI_Controller{
 
 			echo "Hello World from PDF creation in codeigniter";
 
+
+			?>
+			<table>
+			
+				<tr>
+					<td>A</td>
+					<td>SOURCE 1</td>
+				</tr>
+				<tr>
+					<td>B</td>
+					<td>SOURCE 2</td>
+				</tr>
+
+				<tr>
+					<td>C</td>
+					<td>SOURCE 3</td>
+				</tr>
+
+
+			</table>
+
+			<?php
+
+
 		    // we can have any view part here like HTML, PHP etc
 		    $content = ob_get_contents();
 		ob_end_clean();
